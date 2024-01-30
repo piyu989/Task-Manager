@@ -1,0 +1,5 @@
+package com.end.config;
+
+public class ApplicationConfiguration {
+
+}

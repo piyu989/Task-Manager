@@ -1,0 +1,5 @@
+package com.end.model;
+
+public class User {
+
+}

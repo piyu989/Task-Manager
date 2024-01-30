@@ -1,0 +1,35 @@
+package com.end.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.end.model.User;
+import com.end.repository.UserRepository;
+import com.end.service.CustomerUserServiceImpl;
+
+@RestController
+public class AuthController {
+
+	@Autowired
+	private UserRepository repo;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private CustomerUserServiceImpl customerUserDetails;
+	
+	@PostMapping("/signup")
+	public ResponseEntity<?> createUserHandle(@RequestBody User user) {
+		String email=user.getEmail();
+		String password=user.getPassword();
+		String fullName=user.getFullName();
+		String role=user.getRole();  
+		
+		repo.save(user);
+		return ResponseEntity.ok("okay");
+	}
+}

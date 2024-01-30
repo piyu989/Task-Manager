@@ -1,0 +1,5 @@
+package com.end.controller;
+
+public class AuthController {
+
+}
