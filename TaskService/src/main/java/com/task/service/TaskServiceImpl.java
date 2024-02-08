@@ -20,14 +20,14 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public Task create(Task task, String requestRole) throws Exception {
 		// TODO Auto-generated method stub
-		if(requestRole.equals("ROLE_ADMIN")) {
+		if(requestRole.equals("ROLE_CUSTOMER")) {
 			throw new Exception("Only Admin can Assigned Task");
 		}
 		task.setStatus(TaskStatus.PENDING);
 		task.setCreatedAt(LocalDateTime.now());
 		return taskRepo.save(task);
 	}
-
+	
 	@Override
 	public Task getTaskById(Long id) throws Exception {
 		// TODO Auto-generated method stub

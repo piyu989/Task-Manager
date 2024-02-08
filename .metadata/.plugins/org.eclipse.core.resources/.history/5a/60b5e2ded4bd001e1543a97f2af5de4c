@@ -1,5 +1,0 @@
-package com.end.config;
-
-public class JwtProvider {
-
-}

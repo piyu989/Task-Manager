@@ -1,5 +1,0 @@
-package com.end.service;
-
-public interface UserService {
-
-}

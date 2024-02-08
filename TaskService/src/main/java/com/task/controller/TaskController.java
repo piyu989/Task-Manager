@@ -45,16 +45,19 @@ public class TaskController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Task> getTaskById(@PathVariable Long id,
 											@RequestHeader("Authorization") String jwt) throws Exception{
+		
 		Task task=taskService.getTaskById(id);
+		if(task==null) throw new RuntimeException("Task is not available of this id");
 		
 		return new ResponseEntity<>(task,HttpStatus.OK);
 		
 	}
 	
 	
-	@GetMapping("/{user}")
+	@GetMapping("/user/{user}")
 	public ResponseEntity<List<Task>> getAssignedUsersTask(@RequestParam(required = false) TaskStatus status,
 											@RequestHeader("Authorization") String jwt) throws Exception{
+		
 		UserDto user=userService.getUserProfile(jwt);
 		List<Task> tasks=taskService.assignedUsersTask(user.getId(), status);
 		
@@ -77,6 +80,7 @@ public class TaskController {
 											@PathVariable Long id,
 											@PathVariable Long userId,
 											@RequestHeader("Authorization") String jwt) throws Exception{
+		
 		Task tasks=taskService.assignedToUser(userId, id);
 		
 		return new ResponseEntity<>(tasks,HttpStatus.OK);
@@ -88,6 +92,7 @@ public class TaskController {
 											@PathVariable Long id,
 											@RequestBody Task task,
 											@RequestHeader("Authorization") String jwt) throws Exception{
+		
 		UserDto user=userService.getUserProfile(jwt);
 		Task tasks=taskService.updateTask(id, task, user.getId());
 		
@@ -97,6 +102,7 @@ public class TaskController {
 	
 	@PutMapping("/{id}/complete")
 	public ResponseEntity<Task> completeTask(@PathVariable Long id) throws Exception{
+		
 		Task tasks=taskService.completeTask(id);
 		
 		return new ResponseEntity<>(tasks,HttpStatus.OK);
