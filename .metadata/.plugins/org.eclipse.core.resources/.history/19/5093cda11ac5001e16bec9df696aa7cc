@@ -1,0 +1,5 @@
+package com.sub.repository;
+
+public interface SubmissionRepository {
+
+}

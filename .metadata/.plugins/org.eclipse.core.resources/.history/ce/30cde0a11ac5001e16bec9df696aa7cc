@@ -1,0 +1,5 @@
+package com.sub.service;
+
+public interface SubmissionService {
+
+}

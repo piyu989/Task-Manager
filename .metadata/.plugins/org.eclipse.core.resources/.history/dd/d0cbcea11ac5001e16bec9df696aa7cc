@@ -1,0 +1,5 @@
+package com.sub.model;
+
+public class Submission {
+
+}
