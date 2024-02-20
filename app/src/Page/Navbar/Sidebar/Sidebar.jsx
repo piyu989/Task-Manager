@@ -27,7 +27,7 @@ const Sidebar = () => {
     }
 
     return (
-        <div className='card fixed min-h-[85vh] flex flex-col justify-center w-[20vw]'>
+        <div className='card fixed  min-h-[85vh] flex flex-col justify-center w-[20vw]'>
         <div className='space-y-5 h-full'>
             <div className='flex justify-center'>
                 <Avatar
