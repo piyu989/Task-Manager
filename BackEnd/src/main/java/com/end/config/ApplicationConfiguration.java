@@ -47,7 +47,7 @@ public class ApplicationConfiguration {
 			public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
 				// TODO Auto-generated method stub
 				CorsConfiguration cfg=new CorsConfiguration();
-				cfg.setAllowedOrigins(Collections.singletonList("*"));
+				cfg.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
 				cfg.setAllowedMethods(Collections.singletonList("*"));
 				cfg.setAllowedHeaders(Collections.singletonList("*"));
 				cfg.setAllowCredentials(true);
