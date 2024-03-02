@@ -5,6 +5,8 @@ import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useDispatch } from 'react-redux';
+import { createTask } from '../../ReduxToolKit/TaskSlice';
 
 const style = {
   position: 'absolute',
@@ -20,6 +22,8 @@ const style = {
 const tagOption=["Angular","Spring","React js","Vue js","Spring boot","Node js","Python"]
 
 export default function CreateNewTaskCard({handleClose,open}) {
+
+  const dispatch=useDispatch();
 
   const [formData,setFormData]=useState({
     title:"",
@@ -67,6 +71,7 @@ export default function CreateNewTaskCard({handleClose,open}) {
     const {deadline}=formData;
     formData.deadline=formatDate(deadline);
     formData.tags=selectedTags;
+    dispatch(createTask(formData))
     console.log("formData",formData)
     // console.log(selectedTags)
     handleClose()

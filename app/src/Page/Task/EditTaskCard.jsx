@@ -1,10 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTaskById } from '../../ReduxToolKit/TaskSlice';
+import axios from 'axios';
 
 const style = {
   position: 'absolute',
@@ -19,7 +22,34 @@ const style = {
 
 const tagOption=["Angular","Spring","React js","Vue js","Spring boot","Node js","Python"]
 
-export default function EditTaskCard({handleClose,open}) {
+export default function EditTaskCard({ item,handleClose,open }) {
+
+  const dispatch=useDispatch();
+  const {task}=useSelector(store=>store);
+
+  // useEffect(()=>{
+  //   dispatch(fetchTaskById(item.id));
+  //   console.log("radhe radhe")
+  // },[item.id]);
+
+  // useEffect(()=>{
+  //   if(task.taskDetails)setFormData(task.taskDetails)
+  // },[task.taskDetails])
+
+  // useEffect(() => {
+  //   axios.get(`http://localhost:8080/api/tasks/${task.id}`)
+  //   .then(response => {
+  //     const { data } = response;
+  //     console.log("data", data);
+  //   })
+  //   .catch(error => {
+  //     console.error("Error fetching task:", error);
+  //   });
+    // if(task.taskDetails){
+    //   setFormData(task.taskDetails);
+    //   console.lod(p);
+    // }
+  // },[task.taskDetails]);
 
   const [formData,setFormData]=useState({
     title:"",

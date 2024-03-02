@@ -4,11 +4,16 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UserList from '../UserList';
 import SubmissionList from '../SubmissionList';
 import EditTaskCard from '../EditTaskCard';
+import { useDispatch } from 'react-redux';
+import { deleteTask } from '../../../ReduxToolKit/TaskSlice';
+import axios from 'axios';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const role="ROLE_ADMIN"
 
-const TaskCard = () => {
+const TaskCard = ({item}) => {
 
+    const dispatch=useDispatch();
     const [anchorEl, setAnchorEl] = React.useState(null);
     const openMenu = Boolean(anchorEl);
     const handleMenuClick = (event) => {
@@ -45,14 +50,49 @@ const TaskCard = () => {
     const handleEditCloseList=()=>{
         setOpenEditList(false);
     };
+
+    const location=useLocation();
+    const navigate=useNavigate();
     
-    const handleOpenEditkModel = () =>{
+    const handleOpenEditkModel = () => {
+        const updatedParams = new URLSearchParams(location.search);
+        updatedParams.set("taskId", item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`);
         setOpenEditList(true);
+        // axios.get(`http://localhost:8080/api/tasks/${item.id}`)
+        //   .then(response => {
+        //     const { data } = response;
+        //     console.log("data is coming");
+        //   })
+        //   .catch(error => {
+        //     console.error("Error fetching task:", error.response);
+        //   });
+        fetchData();
+        console.log("ram ram")
+
+        
         handleMenuClose();
     };
+
+    const fetchData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8080/api/tasks/502`)
+          const jsonData = response.data;
+          console.log(jsonData); // JSON data
+          console.log("milgya")
+          return jsonData; // Return the JSON data if needed
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          // Handle the error
+        }
+      };
+      
     const handleDeleteTask = () =>{
+        axios.delete(`http://localhost:8080/api/tasks/${item.id}`);
+        window.location.reload();
         handleMenuClose();
     };
+
 
   return (
     <div>
@@ -60,18 +100,18 @@ const TaskCard = () => {
             <div className='lg:flex gap-5 items-center space-y-2 w-[90%] lg:w-[70%]'>
                 <div>
                     <img className='lg:w-[7rem] lg:h-[rem] object-cover'
-                    src='https://i.pinimg.com/474x/6f/4b/2e/6f4b2e0d5e686801f107213a4ce0a90c.jpg'
+                    src={item.image}
                     alt=''/>
                 </div>
                 <div className='space-y-5'>
                     <div className='space-y-2'>
-                        <h1 className='font-bold text-lg'>Car rental website</h1>
-                        <p className='text-gray-400 text-sm'>use latest framework and technology to create this website</p>
+                        <h1 className='font-bold text-lg'>{item.title}</h1>
+                        <p className='text-gray-400 text-sm'>{item.description}</p>
                     </div>
 
                     <div className='flex flex-wrap gap-2 items-center'>
-                        {[1,1,1,1].map((item)=><span className='py-1 px-5 rounded-full techstack'>
-                            Angular
+                        {item.tags.map((item)=><span className='py-1 px-5 rounded-full techstack'>
+                            {item}
                         </span>)}
                     </div>
                 </div>
@@ -108,7 +148,7 @@ const TaskCard = () => {
         </div>
         <UserList open={openUserList} handleClose={handleMenuCloseUserList} />
         <SubmissionList open={openSubmissionList} handleClose={handleSubmissionCloseList} />
-        <EditTaskCard open={openEditList} handleClose={handleEditCloseList} />
+        <EditTaskCard item={item} open={openEditList} handleClose={handleEditCloseList} />
     </div>
   )
 }

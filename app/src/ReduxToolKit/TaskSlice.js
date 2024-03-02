@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api, setAuthHeader } from "../api/api";
+import axios from "axios";
 
 export const fetchTasks = createAsyncThunk("task/fetchTasks",
 async({status})=>{
@@ -34,14 +35,12 @@ async({status})=>{
 );
 
 export const fetchTaskById = createAsyncThunk("task/fetchTaskById",
-async({taskId,status})=>{
+async({taskId})=>{
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
-        const {data}=await api.get(`/api/tasks/${taskId}`,{
-            params:{status}
-        })
-        console.log("fetch task by id ",data)
-        return data;
+        // const {data}=await api.get(`/api/tasks/${taskId}`);
+        console.log("fetch task by id ")
+        // return data;
     }catch(error){
         console.log("error",error)
         throw Error(error.response.data.error)
@@ -92,10 +91,11 @@ async({taskId,userId})=>{
 );
 
 export const deleteTask = createAsyncThunk("task/deleteTask",
-async({taskId})=>{
+async({taskId}) => {
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
-        const {data}=await api.put(`/api/tasks/${taskId}`);
+        const {data}=await api.delete(`/api/tasks/${taskId}`);
+        // axios.delete(`http://localhost:8080/api/tasks/${taskId}`);
         console.log("deleted task: ")
         return taskId;
     }catch(error){
@@ -152,6 +152,10 @@ const taskSlice=createSlice({
         .addCase(createTask.rejected,(state,action)=>{
             state.error=action.error.message;
             state.loading=false;
+        })
+        .addCase(fetchTaskById.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.taskDetails=action.payload;
         })
         .addCase(updateTask.fulfilled,(state,action)=>{
             const updateTask=action.payload;

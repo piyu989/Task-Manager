@@ -6,9 +6,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 
 const menu=[
     {name:"Home",value:"Home",role:["ROLE_CUSTOMER","ROLE_ADMIN"]},
-    {name:"Done",value:"Done",role:["ROLE_CUSTOMER","ROLE_ADMIN"]},
-    {name:"Assigned",value:"Assigned",role:["ROLE_ADMIN"]},
-    {name:"Not Assigned",value:"Pending",role:["ROLE_ADMIN"]},
+    {name:"Done",value:"DONE",role:["ROLE_CUSTOMER","ROLE_ADMIN"]},
+    {name:"Assigned",value:"ASSIGNED",role:["ROLE_ADMIN"]},
+    {name:"Not Assigned",value:"PENDING",role:["ROLE_ADMIN"]},
     {name:"Create new Task",value:"",role:["ROLE_ADMIN"]},
     {name:"Notification",value:"Notification",role:["ROLE_CUSTOMER"]}
 ]
