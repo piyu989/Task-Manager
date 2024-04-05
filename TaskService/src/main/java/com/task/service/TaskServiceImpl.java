@@ -69,23 +69,37 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public Task assignedToUser(Long userId, Long taskId) throws Exception {
 		// TODO Auto-generated method stub
-		Task existingTask=taskRepo.findById(taskId).orElseThrow();
-		existingTask.setAssignedUserId(taskId);
-		existingTask.setStatus(TaskStatus.DONE);
 		
-		return taskRepo.save(existingTask);
+		try {			
+			Task existingTask=taskRepo.findById(taskId).orElseThrow();
+			existingTask.setAssignedUserId(userId);
+			existingTask.setStatus(TaskStatus.ASSIGNED);
+			
+			return taskRepo.save(existingTask);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 
 	@Override
 	public List<Task> assignedUsersTask(Long userId, TaskStatus status) {
-		// TODO Auto-generated method stub
-		List<Task> allTask=taskRepo.findByAssignedUserId(userId);
 		
-		List<Task> filteredTask=allTask.stream().filter(
-				task-> status==null||task.getStatus().name().equalsIgnoreCase(status.toString())
-				).collect(Collectors.toList());
+		try {			
+			// TODO Auto-generated method stub
+			List<Task> allTask=taskRepo.findByAssignedUserId(userId);
+			
+			List<Task> filteredTask=allTask.stream().filter(
+					task-> status==null||task.getStatus().name().equalsIgnoreCase(status.toString())
+					).collect(Collectors.toList());
+			return filteredTask;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
 		
-		return filteredTask;
+		return null;
 	}
 
 	@Override

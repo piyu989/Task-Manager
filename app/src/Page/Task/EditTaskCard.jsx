@@ -6,8 +6,8 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTaskById } from '../../ReduxToolKit/TaskSlice';
-import axios from 'axios';
+import { fetchTaskById, updateTask } from '../../ReduxToolKit/TaskSlice';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 const style = {
   position: 'absolute',
@@ -27,29 +27,9 @@ export default function EditTaskCard({ item,handleClose,open }) {
   const dispatch=useDispatch();
   const {task}=useSelector(store=>store);
 
-  // useEffect(()=>{
-  //   dispatch(fetchTaskById(item.id));
-  //   console.log("radhe radhe")
-  // },[item.id]);
-
-  // useEffect(()=>{
-  //   if(task.taskDetails)setFormData(task.taskDetails)
-  // },[task.taskDetails])
-
-  // useEffect(() => {
-  //   axios.get(`http://localhost:8080/api/tasks/${task.id}`)
-  //   .then(response => {
-  //     const { data } = response;
-  //     console.log("data", data);
-  //   })
-  //   .catch(error => {
-  //     console.error("Error fetching task:", error);
-  //   });
-    // if(task.taskDetails){
-    //   setFormData(task.taskDetails);
-    //   console.lod(p);
-    // }
-  // },[task.taskDetails]);
+  const location=useLocation();
+  const queryParams=new URLSearchParams(location.search);
+  const taskId=queryParams.get("taskId");
 
   const [formData,setFormData]=useState({
     title:"",
@@ -94,16 +74,35 @@ export default function EditTaskCard({ item,handleClose,open }) {
 
   const handleSubmit=(e)=>{
     e.preventDefault();
-    const {deadline}=formData;
-    formData.deadline=formatDate(deadline);
-    formData.tags=selectedTags;
-    console.log("formData",formData)
-    // console.log(selectedTags)
+    // const {deadline}=formData;
+    // formData.deadline=formatDate(deadline);
+    formData.tags=formData.tags;
+    
+    dispatch(updateTask({id:taskId,updateTaskData:formData}))
     handleClose()
+    handleRemoveTaskIdParams();
   }
+  const navigate=useNavigate();
+  
+  const handleRemoveTaskIdParams=()=>{
+    const updatedPath = location.pathname;
+    navigate(updatedPath, { replace: true });
+  }
+
+  useEffect(()=>{
+    dispatch(fetchTaskById(taskId));
+  },[taskId])
+
+  useEffect(() => {
+    if(task.taskDetails){
+      setFormData(task.taskDetails);
+    }
+      
+  },[task.taskDetails])
 
   const handleTagsChange=(event,value)=>{
     setSelectTags(value);
+    console.log('Selected Tags:', value);
     setFormData({
       ...formData,
       tags: value, 

@@ -48,12 +48,13 @@ export const getUserProfile = createAsyncThunk("auth/getUserProfile",async(jwt)=
 })
 
 
-export const getUserList = createAsyncThunk("auth/getUserList",async(jwt)=>{
-    setAuthHeader(jwt,api)
+export const getUserList = createAsyncThunk("auth/getUserList",
+async()=>{
+    setAuthHeader(localStorage.getItem("jwt"),api)
     try{
-        const {data}=await api.get(`/auth/users`)
-        console.log("user list sucess",data)
-        return data;
+        const response=await api.get(`/api/user`)
+        console.log("user list sucess",response.data)
+        return response.data;
     }catch(error){
         console.log("catch error",error);
         throw Error(error.response.data.error)

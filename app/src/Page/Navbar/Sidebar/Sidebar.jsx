@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import "./Sidebar.css"
 import CreateNewTaskCard from '../../Task/CreateTaskCard'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../../ReduxToolKit/AuthSlice'
 
 const menu=[
     {name:"Home",value:"Home",role:["ROLE_CUSTOMER","ROLE_ADMIN"]},
@@ -19,9 +21,8 @@ const role="ROLE_ADMIN"
 const Sidebar = () => {
 
     const location=useLocation();
-
     const navigate=useNavigate();
-    
+    const dispatch=useDispatch();
     const [activeMenu, setActiveMenu]=useState("Home");
 
     const [openCreateTaskList,setOpenCreateTaskList]=useState(false);
@@ -53,6 +54,7 @@ const Sidebar = () => {
     }
 
     const handleLogout =()=>{
+        dispatch(logout());
         console.log("logout")
     }
 

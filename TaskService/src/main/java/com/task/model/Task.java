@@ -27,7 +27,7 @@ public class Task {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	private String title;
-	private String description;
+	private String description; 
 	private String image;
 	private Long assignedUserId;
 	private List<String> tags=new ArrayList<>();

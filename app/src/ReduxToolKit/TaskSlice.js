@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api, setAuthHeader } from "../api/api";
-import axios from "axios";
 
 export const fetchTasks = createAsyncThunk("task/fetchTasks",
 async({status})=>{
@@ -35,12 +34,12 @@ async({status})=>{
 );
 
 export const fetchTaskById = createAsyncThunk("task/fetchTaskById",
-async({taskId})=>{
+async(taskId)=>{
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
-        // const {data}=await api.get(`/api/tasks/${taskId}`);
-        console.log("fetch task by id ")
-        // return data;
+        const response = await api.get(`/api/tasks/${taskId}`);
+        console.log("API response:", response.data);
+        return response.data;
     }catch(error){
         console.log("error",error)
         throw Error(error.response.data.error)
@@ -66,9 +65,12 @@ export const updateTask = createAsyncThunk("task/updateTask",
 async({id,updateTaskData})=>{
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
-        const {data}=await api.put(`/api/tasks/${id}`,updateTaskData);
-        console.log("updated task: ",data)
-        return data;
+        const response=await api.put(`/api/tasks/${id}`,updateTaskData);
+        console.log("updated task: ",response.data)
+        return response.data;
+        // const {data}=await api.put(`/api/tasks/${id}`,updateTaskData);
+        // console.log("updated task: ",data)
+        // return data;
     }catch(error){
         console.log("error",error)
         throw Error(error.response.data.error)
@@ -80,9 +82,11 @@ export const assignedTaskToUser = createAsyncThunk("task/assignedTaskToUser",
 async({taskId,userId})=>{
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
-        const {data}=await api.put(`/api/tasks/${taskId}/user/${userId}/assigned`);
-        console.log("assigned  task: ",data)
-        return data;
+        const response=await api.put(`/api/tasks/user/${taskId}/assigned/${userId}`);
+        console.log("assigned  task: ",response.data.message)
+        return response.data;
+        // console.log(taskId," ",userId);
+        // return taskId;
     }catch(error){
         console.log("error",error)
         throw Error(error.response.data.error)
@@ -95,7 +99,6 @@ async({taskId}) => {
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
         const {data}=await api.delete(`/api/tasks/${taskId}`);
-        // axios.delete(`http://localhost:8080/api/tasks/${taskId}`);
         console.log("deleted task: ")
         return taskId;
     }catch(error){

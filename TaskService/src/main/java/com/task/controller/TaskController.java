@@ -77,7 +77,7 @@ public class TaskController {
 		
 	}
 	
-	@PutMapping("/{id}/user/{userId}/assigned")
+	@PutMapping("/user/{id}/assigned/{userId}")
 	public ResponseEntity<Task> assignedTaskToUser(
 											@PathVariable Long id,
 											@PathVariable Long userId,
@@ -88,6 +88,7 @@ public class TaskController {
 		return new ResponseEntity<>(tasks,HttpStatus.OK);
 		
 	}
+	
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<Task> updateTask(

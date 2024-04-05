@@ -3,7 +3,7 @@ import { api, setAuthHeader } from "../api/api";
 
 export const submitTask=createAsyncThunk("submissions/submitTask",
     async({taskId,githubLink})=>{
-        setAuthHeader(localStorage.getItem("jwt",api))
+        setAuthHeader(localStorage.getItem("jwt"),api)
 
         try{
             const {data}=await api.post(`/api/submissions?task_id=${taskId}&github_link=${githubLink}`,{});

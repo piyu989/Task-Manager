@@ -4,24 +4,37 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import UserList from '../UserList';
 import SubmissionList from '../SubmissionList';
 import EditTaskCard from '../EditTaskCard';
-import { useDispatch } from 'react-redux';
-import { deleteTask } from '../../../ReduxToolKit/TaskSlice';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { api } from '../../../api/api';
+import { fetchTaskById } from '../../../ReduxToolKit/TaskSlice';
+import { useSelector } from 'react-redux';
+import SubmitFormModel from './SubmitFormModel';
 
 const role="ROLE_ADMIN"
 
 const TaskCard = ({item}) => {
 
-    const dispatch=useDispatch();
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const {auth}=useSelector(store=>store)
     const openMenu = Boolean(anchorEl);
     const handleMenuClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
     const handleMenuClose = () => {
         setAnchorEl(null);
+        
+        // navigate('/');
+        // handleRemoveTaskIdParams();
     };
+
+    const [formData,setFormData]=useState({
+        title:"",
+        image:"",
+        description:"",
+        tags:[],
+        deadline: new Date(),
+      })
 
     const [openUserList,setOpenUserList]=useState(false);
     
@@ -30,6 +43,10 @@ const TaskCard = ({item}) => {
     };
     
     const handleOpenUserList = () =>{
+        const updatedParams = new URLSearchParams(location.search);
+        updatedParams.set("taskId", item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`);
+        
         setOpenUserList(true);
         handleMenuClose();
     };
@@ -41,6 +58,10 @@ const TaskCard = ({item}) => {
     };
     
     const handleOpenSubmissionList = () =>{
+        const updatedParams = new URLSearchParams(location.search);
+        updatedParams.set("taskId", item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`);
+
         setOpenSubmissionList(true);
         handleMenuClose();
     };
@@ -53,46 +74,47 @@ const TaskCard = ({item}) => {
 
     const location=useLocation();
     const navigate=useNavigate();
+
+    // const handleRemoveTaskIdParams=()=>{
+    //     const updatedParams = new URLSearchParams(location.search);
+    //     updatedParams.delete("filter")
+    //     const queryString=updatedParams.toString();
+    //     const updatedPath=queryString?`${location.pathname}?${queryString}`:location.pathname;
+    //     navigate(updatedPath);
+    // }
     
-    const handleOpenEditkModel = () => {
+    const handleOpenEditkModel = async () => {
         const updatedParams = new URLSearchParams(location.search);
         updatedParams.set("taskId", item.id);
         navigate(`${location.pathname}?${updatedParams.toString()}`);
-        setOpenEditList(true);
-        // axios.get(`http://localhost:8080/api/tasks/${item.id}`)
-        //   .then(response => {
-        //     const { data } = response;
-        //     console.log("data is coming");
-        //   })
-        //   .catch(error => {
-        //     console.error("Error fetching task:", error.response);
-        //   });
-        fetchData();
-        console.log("ram ram")
 
-        
+        setOpenEditList(true);      
         handleMenuClose();
+        // navigate('/');
+        // handleRemoveTaskIdParams();  
     };
 
-    const fetchData = async () => {
-        try {
-          const response = await axios.get(`http://localhost:8080/api/tasks/502`)
-          const jsonData = response.data;
-          console.log(jsonData); // JSON data
-          console.log("milgya")
-          return jsonData; // Return the JSON data if needed
-        } catch (error) {
-          console.error('Error fetching data:', error);
-          // Handle the error
-        }
-      };
-      
     const handleDeleteTask = () =>{
         axios.delete(`http://localhost:8080/api/tasks/${item.id}`);
         window.location.reload();
         handleMenuClose();
     };
 
+
+    const [openSubmitFormModel,setOpenSubmitFormModel]=useState(false);
+    
+    const handleCloseSubmitFormModel=()=>{
+        setOpenSubmissionList(false);
+    };
+    
+    const handleOpenSubmitFormModel = () =>{
+        const updatedParams = new URLSearchParams(location.search);
+        updatedParams.set("taskId", item.id);
+        navigate(`${location.pathname}?${updatedParams.toString()}`);
+
+        setOpenSubmitFormModel(true);
+        handleMenuClose();
+    };
 
   return (
     <div>
@@ -134,13 +156,13 @@ const TaskCard = ({item}) => {
                     }}
                 >
                     {
-                        role==="ROLE_ADMIN"?<>
+                        auth.user?.role === "ROLE_ADMIN"?<>
                         <MenuItem onClick={handleOpenUserList}>Assigned User</MenuItem>
                         <MenuItem onClick={handleOpenSubmissionList}>See Submission</MenuItem>
                         <MenuItem onClick={handleOpenEditkModel}>Edit</MenuItem>
                         <MenuItem onClick={handleDeleteTask}>Delete</MenuItem>
                         </>:<>
-                        
+                        <MenuItem onClick={handleOpenSubmitFormModel}>Submit</MenuItem>
                         </>
                     }
                 </Menu>
@@ -149,6 +171,7 @@ const TaskCard = ({item}) => {
         <UserList open={openUserList} handleClose={handleMenuCloseUserList} />
         <SubmissionList open={openSubmissionList} handleClose={handleSubmissionCloseList} />
         <EditTaskCard item={item} open={openEditList} handleClose={handleEditCloseList} />
+        <SubmitFormModel open={openSubmitFormModel} handleClose={handleCloseSubmitFormModel} />
     </div>
   )
 }
