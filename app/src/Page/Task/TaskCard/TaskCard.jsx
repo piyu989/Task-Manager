@@ -6,14 +6,16 @@ import SubmissionList from '../SubmissionList';
 import EditTaskCard from '../EditTaskCard';
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { api } from '../../../api/api';
-import { fetchTaskById } from '../../../ReduxToolKit/TaskSlice';
 import { useSelector } from 'react-redux';
 import SubmitFormModel from './SubmitFormModel';
 
 const role="ROLE_ADMIN"
 
 const TaskCard = ({item}) => {
+
+    const location=useLocation();
+    const navigate=useNavigate();
+
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const {auth}=useSelector(store=>store)
@@ -23,9 +25,6 @@ const TaskCard = ({item}) => {
     };
     const handleMenuClose = () => {
         setAnchorEl(null);
-        
-        // navigate('/');
-        // handleRemoveTaskIdParams();
     };
 
     const [formData,setFormData]=useState({
@@ -72,9 +71,6 @@ const TaskCard = ({item}) => {
         setOpenEditList(false);
     };
 
-    const location=useLocation();
-    const navigate=useNavigate();
-
     // const handleRemoveTaskIdParams=()=>{
     //     const updatedParams = new URLSearchParams(location.search);
     //     updatedParams.delete("filter")
@@ -87,11 +83,9 @@ const TaskCard = ({item}) => {
         const updatedParams = new URLSearchParams(location.search);
         updatedParams.set("taskId", item.id);
         navigate(`${location.pathname}?${updatedParams.toString()}`);
-
-        setOpenEditList(true);      
-        handleMenuClose();
-        // navigate('/');
-        // handleRemoveTaskIdParams();  
+   
+        handleMenuClose();  // Close the menu first
+        setOpenEditList(true); // Then set the state
     };
 
     const handleDeleteTask = () =>{
@@ -103,8 +97,8 @@ const TaskCard = ({item}) => {
 
     const [openSubmitFormModel,setOpenSubmitFormModel]=useState(false);
     
-    const handleCloseSubmitFormModel=()=>{
-        setOpenSubmissionList(false);
+    const handleCloseSubmitFormModel = () => {
+        setOpenSubmitFormModel(false);
     };
     
     const handleOpenSubmitFormModel = () =>{

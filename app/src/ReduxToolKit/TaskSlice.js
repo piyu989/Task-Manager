@@ -33,7 +33,7 @@ async({status})=>{
 }
 );
 
-export const fetchTaskById = createAsyncThunk("task/fetchTaskById",
+export const fetchTaskById = createAsyncThunk("tasks/fetchTaskById",
 async(taskId)=>{
     setAuthHeader(localStorage.getItem("jwt"),api)
     try{
