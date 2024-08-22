@@ -9,8 +9,6 @@ It is a robust application built with microservices architecture to manage tasks
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
