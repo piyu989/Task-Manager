@@ -57,20 +57,7 @@ const Signup = ({togglePanel}) => {
             value={formData.password}
             placeholder='enter your password...'
             />
-            <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                <Select
-                onChange={handleChange}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={formData.role}
-                label="Role"
-                name='role'
-                >
-                <MenuItem value={"ROLE_ADMIN"}>ADMIN</MenuItem>
-                <MenuItem value={"ROLE_CUSTOMER"}>USER</MenuItem>
-                </Select>
-            </FormControl>
+            
             <Button
             className='customeButton'
             type='submit'

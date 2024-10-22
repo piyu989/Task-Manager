@@ -41,6 +41,7 @@ public class AuthController {
 		String email=user.getEmail();
 		String password=user.getPassword();		
 		User isEmailExist=repo.findByEmail(email);
+		user.setRole("USER");
 		
 		if(isEmailExist!=null) {
 			throw new UsernameNotFoundException("Email is already registered with another account");
